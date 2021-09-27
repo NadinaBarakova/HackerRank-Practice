@@ -11,18 +11,28 @@ namespace NonDivisibleSubset
             var input = Console.ReadLine().Split();
             int k = int.Parse(input[1]);
             List<int> s = Console.ReadLine().Split().Select(int.Parse).ToList();
-            List<int> sPrim = new List<int>();
-            s.Add(0);
 
-            for (int i = 0; i < s.Count - 1; i++)
+            int[] reminders = new int[k];
+            for (int i = 0; i < k; i++)
             {
-                for (int j = i + 1; j < s.Count - 1; j++)
-                {
-                    sPrim.Add(s[i]);
-                    sPrim.Add(s[j]);
-                }
+                reminders[i] = 0;
             }
-            Console.WriteLine(string.Join(" ",sPrim));
+            for (int i = 0; i < s.Count; i++)
+            {
+                reminders[s[i] % k]++;
+            }
+            if (k % 2 == 0)
+            {
+                reminders[k / 2] = Math.Min(reminders[k / 2], 1);
+            }
+            int result = Math.Min(reminders[0], 1);
+
+            for (int i = 1; i <= k / 2; i++)
+            {
+                result += Math.Max(reminders[i], reminders[k - i]);
+            }
+
+            Console.WriteLine(result);
         }
     }
 }
